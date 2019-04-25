@@ -1,0 +1,15 @@
+{
+  "name": "perceptron-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Igor Mandello",
+  "license": "MIT",
+  "dependencies": {
+    "game-engine-js": "^1.3.2"
+  }
+}
