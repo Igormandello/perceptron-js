@@ -1,7 +1,6 @@
 (() => {
   const ge = new GameEngine({ fullScreen: true, fps: 1 })
-
-  const plot = new Plot(100)
+  const plot = new Plot(100, (x) => -0.3 * x + 450)
 
   ge.addUpdateComponent(ctx => {
     ctx.fillStyle = "#333"
