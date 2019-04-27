@@ -1,21 +1,29 @@
 class Perceptron {
   constructor() {
-    this._weight = Math.random()
-    this._bias = Math.random() * 100
+    this.weights = [];
+    this.lr = 0.01;
+    
+    for (let n = 0; n < 2 + 1; n++)
+      this.weights.push(Math.random());
   }
 
-  predict(x, y) {
-    return this._weight * x + this._bias
+  predict(inputs) {
+    let sum = 0;
+    for (let n = 0; n < this.weights.length - 1; n++)
+      sum += inputs[n] * this.weights[n];
+    sum += this.weights[this.weights.length - 1];
+
+    return sum
   }
 
-  train(xs, ys) {
-    xs.forEach((x, i) => {
-      let delta = 1 - (1 / (this.predict(x) - ys[i]))
+  train(inputDatas, predictDatas) {
+    inputDatas.forEach((inputs, i) => {
+      let diff = predictDatas[i] - this.predict(inputs);
+    
+      for (let n = 0; n < this.weights.length - 1; n++)
+        this.weights[n] += diff * inputs[n] * this.lr;
       
-      this._weight -= delta * 0.001
-      this._bias += delta * 0.001
-
-      console.log(this._weight, this._bias)
+      this.weights[this.weights.length - 1] += diff * this.lr;
     });
   }
 }
