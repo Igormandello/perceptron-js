@@ -1,10 +1,10 @@
 class Perceptron {
   constructor() {
     this.weights = [];
-    this.lr = 0.01;
+    this.lr = 0.001;
     
     for (let n = 0; n < 2 + 1; n++)
-      this.weights.push(Math.random());
+      this.weights.push(Math.random() - 0.5);
   }
 
   predict(inputs) {

@@ -1,8 +1,12 @@
 (() => {
-  const ge = new GameEngine({ ratio: 1, fps: 60 })
-  const plot = new Plot(100, (x) => x)
+  const ge = new GameEngine({ ratio: 1, fps: 200 })
+  const plot = new Plot(
+    1000, 
+    new LinearFunction(-3, -9, 5)
+  )
 
-  ge.addUpdateComponent(ctx => {
+  const input = new Input(() => console.log(plot._perceptron.weights))
+  ge.addUpdateComponent((ctx, ratio, frames) => {
     ctx.fillStyle = "#333"
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height)
   }, 'background')
