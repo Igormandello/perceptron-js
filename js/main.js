@@ -1,7 +1,7 @@
 (() => {
   const ge = new GameEngine({ ratio: 1, fps: 200 })
   const plot = new Plot(
-    1000, 
+    500, 
     new LinearFunction(-3, -9, 5)
   )
 

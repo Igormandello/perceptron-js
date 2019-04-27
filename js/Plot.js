@@ -13,6 +13,39 @@ class Plot {
   }
 
   update(ctx, ratio, frames) {
+    this._drawFunctions(ctx)
+
+    this._points.forEach(point => {
+      ctx.fillStyle = "#FAFAFA"
+      ctx.beginPath()
+      ctx.arc(
+        point.x * ctx.canvas.width,
+        point.y * ctx.canvas.height,
+        6, 0, Math.PI * 2
+      )
+      ctx.fill()
+
+      let predictedSum = this._perceptron.predict([point.x, point.y])
+      let actualSum = this._fn.resolve(point.x, point.y)
+
+      if ((actualSum > 0 && predictedSum > 0) || (actualSum < 0 && predictedSum < 0))
+        ctx.fillStyle = "#0F0"
+      else
+        ctx.fillStyle = "#F00"
+      
+      ctx.beginPath()
+      ctx.arc(
+        point.x * ctx.canvas.width,
+        point.y * ctx.canvas.height,
+        4, 0, Math.PI * 2
+      )
+      ctx.fill()
+    });
+
+    this._trainPerceptron(frames)
+  }
+
+  _drawFunctions(ctx) {
     let initialPy = this._fn.findY(0) * ctx.canvas.height,
         endPy = this._fn.findY(1) * ctx.canvas.height
         
@@ -33,35 +66,9 @@ class Plot {
     ctx.moveTo(0, initialPy)
     ctx.lineTo(ctx.canvas.width, endPy)
     ctx.stroke()
-    this._points.forEach(point => {
-      ctx.fillStyle = "#FAFAFA"
-      ctx.beginPath()
-      ctx.arc(
-        point.x * ctx.canvas.width,
-        point.y * ctx.canvas.height,
-        6, 0, Math.PI * 2
-      )
-      ctx.fill()
+  }
 
-      let predictedSum = this._perceptron.predict([point.x, point.y])
-      let actualSum = this._fn.resolve(point.x, point.y)
-
-      let correctCount = 0
-      if ((actualSum > 0 && predictedSum > 0) || (actualSum < 0 && predictedSum < 0)) {
-        correctCount++
-        ctx.fillStyle = "#0F0"
-      } else
-        ctx.fillStyle = "#F00"
-      
-      ctx.beginPath()
-      ctx.arc(
-        point.x * ctx.canvas.width,
-        point.y * ctx.canvas.height,
-        4, 0, Math.PI * 2
-      )
-      ctx.fill()
-    });
-
+  _trainPerceptron(frames) {
     let xs = []
     let ys = []
     for (let i = 0; i < 50; i++) {
