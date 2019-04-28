@@ -1,5 +1,5 @@
 class Plot {
-  constructor(numberOfPoints, fn) {
+  constructor(numberOfPoints, fn, offset) {
     this._points = []
     for (let i = 0; i < numberOfPoints; i++) {
       this._points.push({
@@ -8,8 +8,9 @@ class Plot {
       })
     }
     
+    this._offset = offset || 0
     this._fn = fn
-    this._perceptron = new Perceptron(2)
+    this._perceptron = new Perceptron(this._fn._degree + 1)
   }
 
   update(ctx, ratio, frames) {
@@ -26,7 +27,7 @@ class Plot {
       ctx.fill()
 
       let predictedSum = this._perceptron.predict(this._generateInputsArray(point))
-      let actualSum = this._fn.resolve(point.x, point.y)
+      let actualSum = this._fn.resolve(point.x + this._offset, point.y)
 
       if ((actualSum > 0 && predictedSum > 0) || (actualSum < 0 && predictedSum < 0))
         ctx.fillStyle = "#0F0"
@@ -50,11 +51,11 @@ class Plot {
     ctx.lineWidth = 4
     ctx.beginPath()
 
-    let py = this._fn.findY(0) * ctx.canvas.height
+    let py = this._fn.findY(this._offset) * ctx.canvas.height
     ctx.moveTo(0, py)
 
-    for (let x = 0.01; x <= 1; x += 0.01) {
-      py = this._fn.findY(x) * ctx.canvas.height
+    for (let x = 0.01; x <= 1.01; x += 0.01) {
+      py = this._fn.findY(x + this._offset) * ctx.canvas.height
       ctx.lineTo(x * ctx.canvas.width, py)
     }   
     ctx.stroke()
@@ -62,20 +63,20 @@ class Plot {
     let coeficients = []
     this._perceptron.weights.forEach((weight, i) => {
       if (i !== this._perceptron.weights.length - 2) {
-        coeficients.push(weight / - this._perceptron.weights[1])
+        coeficients.push(weight / - this._perceptron.weights[this._perceptron.weights.length - 2])
       }
     });
 
-    let predictedFn = new PolynomialFunction(1, coeficients)
+    let predictedFn = new PolynomialFunction(this._fn._degree, coeficients)
     ctx.strokeStyle = "#8F8"
     ctx.lineWidth = 4
     ctx.beginPath()
 
-    py = predictedFn.findY(0) * ctx.canvas.height
+    py = predictedFn.findY(this._offset) * ctx.canvas.height
     ctx.moveTo(0, py)
 
-    for (let x = 0.01; x <= 1; x += 0.01) {
-      py = predictedFn.findY(x) * ctx.canvas.height
+    for (let x = 0.01; x <= 1.01; x += 0.01) {
+      py = predictedFn.findY(x + this._offset) * ctx.canvas.height
       ctx.lineTo(x * ctx.canvas.width, py)
     }   
     ctx.stroke()
@@ -84,7 +85,7 @@ class Plot {
   _trainPerceptron(frames) {
     let xs = []
     let ys = []
-    for (let i = 0; i < 500; i++) {
+    for (let i = 0; i < 100; i++) {
       const point = this._points[(frames + i) % this._points.length]
       xs.push(this._generateInputsArray(point))
       ys.push(this._fn.resolve(point.x, point.y))
@@ -96,7 +97,7 @@ class Plot {
   _generateInputsArray(point) {
     let inputs = []
     for (let i = this._fn._degree; i > 0; i--) {
-      inputs.push(Math.pow(point.x, i))
+      inputs.push(Math.pow(point.x + this._offset, i))
     }
 
     inputs.push(point.y)
