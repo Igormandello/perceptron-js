@@ -88,7 +88,7 @@ class Plot {
     for (let i = 0; i < 100; i++) {
       const point = this._points[(frames + i) % this._points.length]
       xs.push(this._generateInputsArray(point))
-      ys.push(this._fn.resolve(point.x, point.y))
+      ys.push(this._fn.resolve(point.x + this._offset, point.y))
     }
 
     this._perceptron.train(xs, ys)
