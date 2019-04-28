@@ -1,9 +1,9 @@
 class Perceptron {
-  constructor() {
+  constructor(weightsNumber) {
     this.weights = [];
     this.lr = 0.001;
     
-    for (let n = 0; n < 2 + 1; n++)
+    for (let n = 0; n < weightsNumber + 1; n++)
       this.weights.push(Math.random() - 0.5);
   }
 

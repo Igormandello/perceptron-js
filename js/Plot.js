@@ -9,7 +9,7 @@ class Plot {
     }
     
     this._fn = fn
-    this._perceptron = new Perceptron()
+    this._perceptron = new Perceptron(2)
   }
 
   update(ctx, ratio, frames) {
