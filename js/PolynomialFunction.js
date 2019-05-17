@@ -1,12 +1,11 @@
-//10 * x * x * x - 1.5 * x * x - 1.5 * x - y + 1
 class PolynomialFunction {
-  constructor(degree, coeficients) {
-    this._degree = degree
+  constructor(coeficients) {
+    this._degree = this._coeficients.length - 1
     this._coeficients = coeficients
+  }
 
-    if (this._coeficients.length != this._degree + 1) {
-      throw new Error('The coeficients length does not match the function degree')
-    }
+  get degree() {
+    return this._degree
   }
 
   resolve(x, y) {

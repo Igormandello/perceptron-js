@@ -1,4 +1,4 @@
-class Plot {
+class Chart {
   constructor(numberOfPoints, fn, offset) {
     this._points = []
     for (let i = 0; i < numberOfPoints; i++) {
