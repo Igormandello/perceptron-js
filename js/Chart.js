@@ -43,9 +43,6 @@ class Chart {
       ctx.fill()
     });
 
-    // Finds the value of a0.x^n + a1.x^(n-1) + ... + an - y
-    // If the (x, y) pair is in the line, the result will be 0
-
     this._trainPerceptron(frames)
   }
 
