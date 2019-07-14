@@ -11,23 +11,25 @@ class PolynomialFunction {
   resolve(x, y) {
     // Finds the value of a0.x^n + a1.x^(n-1) + ... + an - y
     // If the (x, y) pair is in the line, the result will be 0
-
-    let sum = - y;
-    this._coeficients.forEach((coeficient, i) => {
-      sum += coeficient * Math.pow(x, this._degree - i);
-    });
-
-    return sum;
+    return 0;
   }
 
   findY(x) {
-    // Find the Y value to the given X
+    return 0;
+  }
 
-    let sum = 0;
-    this._coeficients.forEach((coeficient, i) => {
-      sum += coeficient * Math.pow(x, this._degree - i);
-    });
+  display(ctx, color, step) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
 
-    return sum;
+    let py = this.findY(this.offset) * ctx.canvas.height;
+    ctx.moveTo(-step, py);
+
+    for (let x = 0; x <= 1 + step; x += step) {
+      py = this.findY(x + this.offset) * ctx.canvas.height;
+      ctx.lineTo(x * ctx.canvas.width, py);
+    }   
+    ctx.stroke();
   }
 }
