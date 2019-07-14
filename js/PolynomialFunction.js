@@ -1,7 +1,7 @@
 class PolynomialFunction {
   constructor(coeficients) {
-    this._degree = this._coeficients.length - 1
     this._coeficients = coeficients
+    this._degree = this._coeficients.length - 1
   }
 
   get degree() {
