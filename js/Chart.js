@@ -13,11 +13,11 @@ class Chart {
     this.perceptron = new Perceptron(this.fn.degree + 1);
   }
 
-  update(ctx, ratio, frames) {
+  update(ctx) {
     this._drawFunctions(ctx);
     this.points.forEach(this._drawPoint.bind(this, ctx));
 
-    this._trainPerceptron(frames);
+    this._trainPerceptron();
   }
 
   _drawFunctions(ctx) {
@@ -45,19 +45,21 @@ class Chart {
   }
 
   _drawPoint(ctx, point) {
-    let predictedSum = this.perceptron.predict(this._generateInputsArray(point));
-    let actualSum = this.fn.resolve(point.x + this.offset, point.y);
-    let isPredictionCorrect = this._isPredictionCorrect(predictedSum, actualSum);
+    //let predictedSum = this.perceptron.predict(this._generateInputsArray(point));
+    //let actualSum = this.fn.resolve(point.x + this.offset, point.y);
+    //let isPredictionCorrect = this._isPredictionCorrect(predictedSum, actualSum);
     
-    let circle = new OutlinedCircle(point.x, point.y, '#FAFAFA', isPredictionCorrect ? '#0F0' : '#F00');
+    let circle = new OutlinedCircle(point.x, point.y, '#FAFAFA', '#000');
     circle.display(ctx);
   }
 
   _isPredictionCorrect(predict, actual) {
-    return (actual > 0 && predict > 0) || (actual < 0 && predict < 0) || actual === predict;
+    //return (actual > 0 && predict > 0) || (actual < 0 && predict < 0) || actual === predict;
+    return true;
   }
 
-  _trainPerceptron(frames) {
+  _trainPerceptron() {
+    /*
     let xs = [];
     let ys = [];
     for (let i = 0; i < 500; i++) {
@@ -67,9 +69,11 @@ class Chart {
     }
 
     this.perceptron.train(xs, ys);
+    */
   }
 
   _gatherPredictedCoeficients() {
+    /*
     let weights = this.perceptron.weights;
     let yCoefficient = - weights[this.fn.degree];
     
@@ -79,6 +83,9 @@ class Chart {
 
     coeficients.push(this.perceptron.bias / yCoefficient);
     return coeficients;
+    */
+
+    return [];
   }
 
   _generateInputsArray(point) {
