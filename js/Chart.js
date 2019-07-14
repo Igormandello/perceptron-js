@@ -15,51 +15,12 @@ class Chart {
 
   update(ctx, ratio, frames) {
     this._drawFunctions(ctx)
-
-    this._points.forEach(point => {
-      ctx.fillStyle = "#FAFAFA"
-      ctx.beginPath()
-      ctx.arc(
-        point.x * ctx.canvas.width,
-        point.y * ctx.canvas.height,
-        6, 0, Math.PI * 2
-      )
-      ctx.fill()
-
-      let predictedSum = this._perceptron.predict(this._generateInputsArray(point))
-      let actualSum = this._fn.resolve(point.x + this._offset, point.y)
-
-      if ((actualSum > 0 && predictedSum > 0) || (actualSum < 0 && predictedSum < 0))
-        ctx.fillStyle = "#0F0"
-      else
-        ctx.fillStyle = "#F00"
-      
-      ctx.beginPath()
-      ctx.arc(
-        point.x * ctx.canvas.width,
-        point.y * ctx.canvas.height,
-        4, 0, Math.PI * 2
-      )
-      ctx.fill()
-    });
+    this._points.forEach(this._drawPoint.bind(this, ctx))
 
     this._trainPerceptron(frames)
   }
 
   _drawFunctions(ctx) {
-    ctx.strokeStyle = "#CCC"
-    ctx.lineWidth = 4
-    ctx.beginPath()
-
-    let py = this._fn.findY(this._offset) * ctx.canvas.height
-    ctx.moveTo(0, py)
-
-    for (let x = 0.01; x <= 1.01; x += 0.01) {
-      py = this._fn.findY(x + this._offset) * ctx.canvas.height
-      ctx.lineTo(x * ctx.canvas.width, py)
-    }   
-    ctx.stroke()
-
     let coeficients = []
     this._perceptron.weights.forEach((weight, i) => {
       if (i !== this._perceptron.weights.length - 2) {
@@ -68,24 +29,44 @@ class Chart {
     });
 
     let predictedFn = new PolynomialFunction(coeficients)
-    ctx.strokeStyle = "#8F8"
+
+    let step = 0.01
+    this._drawFunction(ctx, this._fn, '#CCC', step)
+    this._drawFunction(ctx, predictedFn, '#8F8', step)
+  }
+
+  _drawFunction(ctx, fn, color, step) {
+    ctx.strokeStyle = color
     ctx.lineWidth = 4
     ctx.beginPath()
 
-    py = predictedFn.findY(this._offset) * ctx.canvas.height
-    ctx.moveTo(0, py)
+    let py = fn.findY(this._offset) * ctx.canvas.height
+    ctx.moveTo(-step, py)
 
-    for (let x = 0.01; x <= 1.01; x += 0.01) {
-      py = predictedFn.findY(x + this._offset) * ctx.canvas.height
+    for (let x = 0; x <= 1 + step; x += step) {
+      py = fn.findY(x + this._offset) * ctx.canvas.height
       ctx.lineTo(x * ctx.canvas.width, py)
     }   
     ctx.stroke()
   }
 
+  _drawPoint(ctx, point) {
+    let predictedSum = this._perceptron.predict(this._generateInputsArray(point))
+    let actualSum = this._fn.resolve(point.x + this._offset, point.y)
+    let isPredictionCorrect = this._isPredictionCorrect(predictedSum, actualSum)
+    
+    let circle = new OutlinedCircle(point.x, point.y, '#FAFAFA', isPredictionCorrect ? '#0F0' : '#F00')
+    circle.display(ctx)
+  }
+
+  _isPredictionCorrect(predict, actual) {
+    return (actual > 0 && predict > 0) || (actual < 0 && predict < 0) || actual === predict
+  }
+
   _trainPerceptron(frames) {
     let xs = []
     let ys = []
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 5000; i++) {
       const point = this._points[(frames + i) % this._points.length]
       xs.push(this._generateInputsArray(point))
       ys.push(this._fn.resolve(point.x + this._offset, point.y))
