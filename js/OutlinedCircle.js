@@ -1,12 +1,12 @@
 class OutlinedCircle {
-  constructor(x, y, innerColor, outlineColor) {
+  constructor(x, y, outlineColor, innerColor) {
     this._innerColor = innerColor;
     this._outlineColor = outlineColor;
     this._position = { x, y };
   }
 
   display(ctx) {
-    ctx.fillStyle = this._innerColor;
+    ctx.fillStyle = this._outlineColor;
     ctx.beginPath();
     ctx.arc(
       this._position.x * ctx.canvas.width,
@@ -15,7 +15,7 @@ class OutlinedCircle {
     );
     ctx.fill();
 
-    ctx.fillStyle = this._outlineColor;
+    ctx.fillStyle = this._innerColor;
     ctx.beginPath();
     ctx.arc(
       this._position.x * ctx.canvas.width,
