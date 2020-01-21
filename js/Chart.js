@@ -25,8 +25,8 @@ class Chart {
     let predictedFn = new PolynomialFunction(coeficients);
 
     let step = 0.01;
-    this.fn.drawFunction(ctx, '#CCC', step);
-    predictedFn.drawFunction(ctx, '#8F8', step);
+    this.fn.display(ctx, '#CCC', step);
+    predictedFn.display(ctx, '#8F8', step);
   }
 
   _drawPoint(ctx, point) {
