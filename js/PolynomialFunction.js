@@ -1,7 +1,8 @@
 class PolynomialFunction {
-  constructor(coeficients) {
+  constructor(coeficients, offset) {
     this._coeficients = coeficients;
     this._degree = this._coeficients.length - 1;
+    this._offset = offset;
   }
 
   get degree() {
@@ -23,11 +24,11 @@ class PolynomialFunction {
     ctx.lineWidth = 4;
     ctx.beginPath();
 
-    let py = this.findY(this.offset) * ctx.canvas.height;
+    let py = this.findY(this._offset) * ctx.canvas.height;
     ctx.moveTo(-step, py);
 
     for (let x = 0; x <= 1 + step; x += step) {
-      py = this.findY(x + this.offset) * ctx.canvas.height;
+      py = this.findY(x + this._offset) * ctx.canvas.height;
       ctx.lineTo(x * ctx.canvas.width, py);
     }   
     ctx.stroke();

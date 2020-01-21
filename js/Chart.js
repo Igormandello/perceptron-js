@@ -1,5 +1,5 @@
 class Chart {
-  constructor(numberOfPoints, fn, offset) {
+  constructor(numberOfPoints, fnCoeficients, offset) {
     this.points = [];
     for (let i = 0; i < numberOfPoints; i++) {
       this.points.push({
@@ -9,7 +9,7 @@ class Chart {
     }
     
     this.offset = offset || 0;
-    this.fn = fn;
+    this.fn = new PolynomialFunction(fnCoeficients, offset);
     this.perceptron = new Perceptron(this.fn.degree + 1);
   }
 
@@ -22,7 +22,7 @@ class Chart {
 
   _drawFunctions(ctx) {
     let coeficients = this._gatherPredictedCoeficients();
-    let predictedFn = new PolynomialFunction(coeficients);
+    let predictedFn = new PolynomialFunction(coeficients, this.offset);
 
     let step = 0.01;
     this.fn.display(ctx, '#CCC', step);
