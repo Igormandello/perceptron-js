@@ -1,7 +1,7 @@
 class PolynomialFunction {
-  constructor(coeficients, offset) {
-    this._coeficients = coeficients;
-    this._degree = this._coeficients.length - 1;
+  constructor(coefficients, offset) {
+    this._coefficients = coefficients;
+    this._degree = this._coefficients.length - 1;
     this._offset = offset;
   }
 
